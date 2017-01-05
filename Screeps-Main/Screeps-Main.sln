@@ -1,0 +1,19 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{904BB834-9783-4FE3-B28E-B0C8096CD2DA}"
+	ProjectSection(SolutionItems) = preProject
+		Scripts\creepFactory.js = Scripts\creepFactory.js
+		Scripts\main.js = Scripts\main.js
+		Scripts\role_builder.js = Scripts\role_builder.js
+		Scripts\role_harvester.js = Scripts\role_harvester.js
+		Scripts\role_upgrader.js = Scripts\role_upgrader.js
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
