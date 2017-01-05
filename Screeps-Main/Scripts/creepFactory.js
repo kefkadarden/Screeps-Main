@@ -6,11 +6,12 @@
         var bodyCost = {
           "move": 50,
           "carry": 50,
-          "work": 20,
-          "heal": 200,
-          "tough": 20,
+          "work": 100,
+          "heal": 250,
+          "tough": 10,
           "attack": 80,
-          "ranged_attack": 150
+          "ranged_attack": 150,
+          "claim": 600
             };
         var cost = 0;
         

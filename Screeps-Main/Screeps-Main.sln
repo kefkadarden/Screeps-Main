@@ -12,7 +12,34 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{904B
 		Scripts\role_upgrader.js = Scripts\role_upgrader.js
 	EndProjectSection
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ScreepsAutocomplete", "..\..\ScreepsAutocomplete\", "{14280536-C9BF-40BB-8534-71CCA0640C5A}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_61255"
+		Debug.AspNetCompiler.PhysicalPath = "..\..\ScreepsAutocomplete\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_61255\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_61255"
+		Release.AspNetCompiler.PhysicalPath = "..\..\ScreepsAutocomplete\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_61255\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "61255"
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14280536-C9BF-40BB-8534-71CCA0640C5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14280536-C9BF-40BB-8534-71CCA0640C5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
