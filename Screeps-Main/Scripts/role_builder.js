@@ -12,8 +12,6 @@ var roleBuilder = {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if (targets.length > 0) {
                 creep.say('building');
-            } else {
-                creep.say('waiting...');
             }
         }
 

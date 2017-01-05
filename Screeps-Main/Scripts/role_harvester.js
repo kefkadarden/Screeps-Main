@@ -2,7 +2,6 @@ var roleHarvester = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
-        /*Need to figure out how to use state array with creep currentState instead of string*/
         var state = [
             'HARVESTING',
             'TRANFERRING',
@@ -16,7 +15,6 @@ var roleHarvester = {
             if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(sources[0]);
                 currentState = 'HARVESTING';
-                creep.say("Harvesting");
             }
         }
         else {
@@ -31,11 +29,9 @@ var roleHarvester = {
                 if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0]);
                     currentState = 'TRANSFERRING';
-                    creep.say("Transferring");
                 }
             } else {
                 currentState = 'IDLE'; //state['IDLE'];
-                creep.say("Idle");
             }
         }
 
