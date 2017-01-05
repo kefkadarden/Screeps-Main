@@ -1,29 +1,40 @@
-var roleUpgrader = {
+var _ = require("lodash");
 
-    /** @param {Creep} creep **/
-    run: function (creep) {
+var creepFactory = {
+    cost: 0,
+    calcCost: function (body) {
+        var bodyCost = {
+            "move": 50,
+            "carry": 50,
+            "work": 100,
+            "heal": 250,
+            "tough": 10,
+            "attack": 80,
+            "ranged_attack": 150,
+            "claim": 600
+        };
+        var cost = 0;
 
-        if (creep.memory.upgrading && creep.carry.energy == 0) {
-            creep.memory.upgrading = false;
-            creep.say('harvesting');
-        }
-        if (!creep.memory.upgrading && creep.carry.energy == creep.carryCapacity) {
-            creep.memory.upgrading = true;
-            creep.say('upgrading');
-        }
+        _.forEach(body, function (part) { cost += bodyCost[part]; });
+        return cost;
+    },
 
-        if (creep.memory.upgrading) {
-            if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(creep.room.controller);
-            }
-        }
-        else {
-            var sources = creep.room.find(FIND_SOURCES);
-            if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0]);
-            }
-        }
+    countType: function (type) {
+        return _.size(_.filter(Game.creeps, function (creep, creepName) {
+            return creep.memory.role === type;
+        }));
+    },
+
+    countTypeByRoom: function (type, room) {
+        return _.size(_.filter(Game.creeps, function (creep, creepName) {
+            return creep.memory.role === type && creep.memory.room === room;
+        }));
+    },
+
+    create: function (spawn, body, type, memory) {
+        var id = this.countType(type) + 1;
+        return spawn.createCreep(body, type + '_' + id, memory);
     }
 };
 
-module.exports = roleUpgrader;
+module.exports = creepFactory;

@@ -1,51 +1,44 @@
 var roleHarvester = require('role.harvester');
-var roleHarvester = require('role.harvester');
-var roleUpgrader = require('role.upgrader');
-var roleBuilder = require('role.builder');
-var creepFactory = require('creepFactory');
+var _ = require("lodash");
 
-module.exports.loop = function () {
-    
-    for(var i in Memory.creeps) {
-        if(!Game.creeps[i]) {
-            delete Memory.creeps[i];
-        }
+var creepFactory = {
+    cost: 0,
+    calcCost: function (body) {
+        var bodyCost = {
+            "move": 50,
+            "carry": 50,
+            "work": 100,
+            "heal": 250,
+            "tough": 10,
+            "attack": 80,
+            "ranged_attack": 150,
+            "claim": 600
+        };
+        var cost = 0;
+
+        _.forEach(body, function (part) { cost += bodyCost[part]; });
+        return cost;
+    },
+
+    countType: function (type) {
+        return _.size(_.filter(Game.creeps, function (creep, creepName) {
+            return creep.memory.role === type;
+        }));
+    },
+
+    countTypeByRoom: function (type, room) {
+        return _.size(_.filter(Game.creeps, function (creep, creepName) {
+            return creep.memory.role === type && creep.memory.room === room;
+        }));
+    },
+
+    create: function (spawn, body, type, memory) {
+        var id = this.countType(type) + 1;
+        return spawn.createCreep(body, type + '_' + id, memory);
     }
-    
-    for (var room in Game.rooms) {
-        var builders = creepFactory.countTypeByRoom('builder',room);
-        var upgraders = creepFactory.countTypeByRoom('upgrader',room);
-        var harvesters = creepFactory.countTypeByRoom('harvester',room);
-        
-        if (Game.rooms[room].energyAvailable >= creepFactory.calcCost([MOVE, WORK, CARRY]) && builders.length < 2) {
-            creepFactory.create(Game.spawns["Spawn1"], [MOVE, WORK, CARRY], "builder", { role: 'builder', room: room });
-            //Game.spawns['Spawn1'].createCreep([MOVE, WORK, CARRY], "Builder_" + (builders.length + 1).toString(), { role: 'builder', room: room });
-        }
+};
 
-        if (Game.rooms[room].energyAvailable >= creepFactory.calcCost([MOVE, WORK, CARRY]) && upgraders.length < 1) {
-            creepFactory.create(Game.spawns["Spawn1"], [MOVE, WORK, CARRY], "upgrader", { role: 'upgrader', room: room });
-            //Game.spawns['Spawn1'].createCreep([MOVE, WORK, CARRY], "Upgrader_" + (upgraders.length + 1).toString(), { role: 'upgrader', room: room });
-        }
-
-        if (Game.rooms[room].energyAvailable >= creepFactory.calcCost([MOVE, WORK, CARRY]) && harvesters.length < 2) {
-            creepFactory.create(Game.spawns["Spawn1"], [MOVE, WORK, CARRY], "harvester", { role: 'harvester', room: room });
-            //Game.spawns['Spawn1'].createCreep([MOVE, WORK, CARRY], "Harvester_" + (harvesters.length + 1).toString(), { role: 'harvester', room: room });
-        }
-
-        for (var name in Game.creeps) {
-            var creep = Game.creeps[name];
-            if (creep.memory.role == 'harvester') {
-                roleHarvester.run(creep);
-            }
-            if (creep.memory.role == 'upgrader') {
-                roleUpgrader.run(creep);
-            }
-            if (creep.memory.role == 'builder') {
-                roleBuilder.run(creep);
-            }
-        }
-    }
-}
+module.exports = creepFactory;
     /*var towers = _.filter(Game.structures,(structure) => structure.type == STRUCTURE_TOWER);
     
     if(towers.length > 0) {
