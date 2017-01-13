@@ -1,24 +1,9 @@
 var _ = require("lodash");
+var strategy = require('strategy');
+var Role = require("Roles");
+var utils = require('utils');
 
 var creepFactory = {
-    cost: 0,
-    calcCost: function (body) {
-        var bodyCost = {
-            "move": 50,
-            "carry": 50,
-            "work": 100,
-            "heal": 250,
-            "tough": 10,
-            "attack": 80,
-            "ranged_attack": 150,
-            "claim": 600
-        };
-        var cost = 0;
-
-        _.forEach(body, function (part) { cost += bodyCost[part]; });
-        return cost;
-    },
-
     countType: function (type) {
         return _.size(_.filter(Game.creeps, function (creep, creepName) {
             return creep.memory.role === type;
@@ -31,10 +16,34 @@ var creepFactory = {
         }));
     },
 
-    create: function (spawn, body, type, memory) {
-        var id = this.countType(type) + 1;
-        return spawn.createCreep(body, type + '_' + id, memory);
-    }
+    create: function (spawn, body, memory) {
+        var id = this.countType(memory.role) + 1;
+        var name = utils.getKeyAsString(Role, memory.role);
+        while (spawn.createCreep(body, name + '_' + id, memory) == ERR_NAME_EXISTS) {
+            id++;
+        }
+    },
+
+    spawn: function (spawn) {
+        if (spawn.spawning) {
+            return;
+        }
+
+        var unit = strategy.getSpawnedCreep(spawn);
+
+        if (unit == null) {
+            return;
+        }
+
+        var totalEnergy = spawn.getEnergyTotal();
+        var totalEnergyCapacity = spawn.getEnergyCapacityTotal();
+        if (totalEnergy >= unit.getCost(totalEnergyCapacity)) {
+            var body = unit.getBodyParts(totalEnergyCapacity);
+            this.create(spawn, body, unit.memory);
+        }
+    },
+
+
 };
 
 module.exports = creepFactory;

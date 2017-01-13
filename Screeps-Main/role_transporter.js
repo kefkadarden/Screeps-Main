@@ -1,16 +1,16 @@
-var HarvesterState = require('HarvesterState');
-var utils = require('utils');
 var Role = require('Roles');
+var utils = require('utils');
 var config = require('config');
 
-var roleHarvester = {
+
+var roleTransporter = {
     memory: {
-        'role': Role.harvester,
+        'role': Role.transporter,
         'room': ""
     },
 
     getBodyParts: function (maxEnergy) {
-        var levels = config.unitConfig['harvester'].levels;
+        var levels = config.unitConfig['transporter'].levels;
         var levelIndex = levels.length - 1;
         for (levelIndex = levels.length - 1; levelIndex >= 0; levelIndex--) {
             var levelConfig = levels[levelIndex];
@@ -26,18 +26,43 @@ var roleHarvester = {
         return utils.calcCost(this.getBodyParts(maxEnergy));
     },
 
-    /** @param {Creep} creep **/
     run: function (creep) {
 
-        if (creep.memory.state === undefined) {
-            creep.memory.state = HarvesterState.IDLE;
-        }
-
         if (creep.carry.energy < creep.carryCapacity) {
-            var sources = creep.room.find(FIND_SOURCES_ACTIVE);
-            if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0]);
-                creep.memory.state = HarvesterState.HARVESTING;
+            var roomHarvesters = creep.room.find(FIND_MY_CREEPS, {
+                filter: function (object) {
+                    if (object.memory.role === Role.harvester && object.carry.energy > 50) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+            );
+
+
+
+            var nearestHarvester = {};
+            var minDist = 99999;
+
+            for (var i = 0; i < roomHarvesters.length; i++) {
+
+                if (creep.pos.getRangeTo(roomHarvesters[i]) < minDist) {
+                    minDist = creep.pos.getRangeTo(roomHarvesters[i]);
+                    nearestHarvester = roomHarvesters[i];
+                }
+            }
+
+
+            if (!creep.pos.inRangeTo(nearestHarvester, 1)) {
+                creep.moveTo(nearestHarvester);
+            } else {
+                var results = nearestHarvester.drop(RESOURCE_ENERGY, nearestHarvester.carry.energy || (creep.carryCapacity - creep.carry.energy));
+
+                var energy = creep.pos.findInRange(FIND_DROPPED_ENERGY, 1);
+                if (energy.length > 0) {
+                    creep.pickup(energy[0]);
+                }
             }
         }
         else {
@@ -52,22 +77,14 @@ var roleHarvester = {
                            );
                 }
             });
+
             if (targets.length > 0) {
                 if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0]);
-                    creep.memory.state = HarvesterState.TRANSFERRING;
                 }
-            } else {
-                creep.memory.state = HarvesterState.IDLE;
-            }
-        }
-
-        if (creep.memory.state && creep.memory.state == HarvesterState.IDLE) {
-            if (creep.moveTo(Game.flags[creep.room.name + '_IdleFlag']) == ERR_INVALID_TARGET) {
-                creep.say("No Idle Flag for room: " + creep.room.name);
             }
         }
     }
 };
 
-module.exports = roleHarvester;
+module.exports = roleTransporter;

@@ -5,11 +5,21 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{904BB834-9783-4FE3-B28E-B0C8096CD2DA}"
 	ProjectSection(SolutionItems) = preProject
+		config.js = config.js
 		Scripts\creepFactory.js = Scripts\creepFactory.js
+		HarvesterState.js = HarvesterState.js
 		Scripts\main.js = Scripts\main.js
 		Scripts\role_builder.js = Scripts\role_builder.js
+		role_default.js = role_default.js
+		role_guard.js = role_guard.js
 		Scripts\role_harvester.js = Scripts\role_harvester.js
+		role_repairer.js = role_repairer.js
+		role_transporter.js = role_transporter.js
 		Scripts\role_upgrader.js = Scripts\role_upgrader.js
+		Roles.js = Roles.js
+		StaticInit.js = StaticInit.js
+		strategy.js = strategy.js
+		utils.js = utils.js
 	EndProjectSection
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ScreepsAutocomplete", "..\..\ScreepsAutocomplete\", "{14280536-C9BF-40BB-8534-71CCA0640C5A}"

@@ -1,40 +1,55 @@
-var _ = require("lodash");
+var Role = require('Roles');
+var utils = require('utils');
+var config = require('config');
 
-var creepFactory = {
-    cost: 0,
-    calcCost: function (body) {
-        var bodyCost = {
-            "move": 50,
-            "carry": 50,
-            "work": 100,
-            "heal": 250,
-            "tough": 10,
-            "attack": 80,
-            "ranged_attack": 150,
-            "claim": 600
-        };
-        var cost = 0;
-
-        _.forEach(body, function (part) { cost += bodyCost[part]; });
-        return cost;
+var roleUpgrader = {
+    memory: {
+        'role': Role.upgrader,
+        'room': ""
     },
 
-    countType: function (type) {
-        return _.size(_.filter(Game.creeps, function (creep, creepName) {
-            return creep.memory.role === type;
-        }));
+    getBodyParts: function (maxEnergy) {
+        var levels = config.unitConfig['upgrader'].levels;
+        var levelIndex = levels.length - 1;
+        for (levelIndex = levels.length - 1; levelIndex >= 0; levelIndex--) {
+            var levelConfig = levels[levelIndex];
+            var levelCost = utils.calcCost(levelConfig.parts);
+            if (levelCost <= maxEnergy) {
+                return levelConfig.parts;
+            }
+        }
+
+        return levels[0].parts;
+    },
+    getCost: function (maxEnergy) {
+        return utils.calcCost(this.getBodyParts(maxEnergy));
     },
 
-    countTypeByRoom: function (type, room) {
-        return _.size(_.filter(Game.creeps, function (creep, creepName) {
-            return creep.memory.role === type && creep.memory.room === room;
-        }));
-    },
 
-    create: function (spawn, body, type, memory) {
-        var id = this.countType(type) + 1;
-        return spawn.createCreep(body, type + '_' + id, memory);
+    /** @param {Creep} creep **/
+    run: function (creep) {
+
+        if (creep.memory.upgrading && creep.carry.energy == 0) {
+            creep.memory.upgrading = false;
+            creep.say('harvesting');
+        }
+        if (!creep.memory.upgrading && creep.carry.energy == creep.carryCapacity) {
+            creep.memory.upgrading = true;
+            creep.say('upgrading');
+        }
+
+        if (creep.memory.upgrading) {
+            if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(creep.room.controller);
+            }
+        }
+        else {
+            var sources = creep.room.find(FIND_SOURCES);
+            if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(sources[0]);
+            }
+        }
     }
 };
 
-module.exports = creepFactory;
+module.exports = roleUpgrader;
