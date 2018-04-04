@@ -66,9 +66,12 @@ var roleBuilder = {
                     return (
                             ((structure.structureType == STRUCTURE_EXTENSION ||
                             structure.structureType == STRUCTURE_SPAWN ||
-                            structure.structureType == STRUCTURE_TOWER) && structure.energy == structure.energyCapacity)
+                            structure.structureType == STRUCTURE_TOWER ||
+                            structure.structureType == STRUCTURE_WALL) && structure.energy == structure.energyCapacity)
                             ||
                             (structure.structureType == STRUCTURE_CONTAINER && structure.store.energy >= structure.storeCapacity * .8)
+                            ||
+                            (structure.structureType == STRUCTURE_SPAWN && structure.energy >= structure.energyCapacity * .8)
                            );
                 }
             });

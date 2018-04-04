@@ -87,11 +87,11 @@ module.exports = function () {
             room.memory.transporterFull = transporters.length > 4;
 
             var spawnsInRoom = room.find(FIND_MY_SPAWNS);
-            if (Game.flags[room.name + '_IdleFlag'] == undefined) {
-                var terrain = Game.map.getTerrainAt(spawnsInRoom[0].pos.x - 5, spawnsInRoom[0].pos.y, room);
-                if (OBSTACLE_OBJECT_TYPES.indexOf(terrain) === -1) {
-                    roomObj.createFlag(spawnsInRoom[0].pos.x - 5, spawnsInRoom[0].pos.y, room + '_IdleFlag', COLOR_YELLOW, COLOR_ORANGE);
-                }
-            }
+            //if (Game.flags[room.name + '_IdleFlag'] == undefined) {
+            //    var terrain = Game.map.getTerrainAt(spawnsInRoom[0].pos.x - 5, spawnsInRoom[0].pos.y, room);
+            //    if (OBSTACLE_OBJECT_TYPES.indexOf(terrain) === -1) {
+            //        roomObj.createFlag(spawnsInRoom[0].pos.x - 5, spawnsInRoom[0].pos.y, room + '_IdleFlag', COLOR_YELLOW, COLOR_ORANGE);
+            //    }
+            //}
         };
 }

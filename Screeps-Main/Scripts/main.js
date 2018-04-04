@@ -22,7 +22,7 @@ module.exports.loop = function () {
 
     for (var room in Game.rooms) {
         var roomObj = Game.rooms[room];
-        var spawnsInRoom = roomObj.find(FIND_MY_SPAWNS);
+        //var spawnsInRoom = roomObj.find(FIND_MY_SPAWNS);
         roomObj.initStats();
 
         var spawns = roomObj.find(FIND_MY_SPAWNS);
@@ -34,7 +34,12 @@ module.exports.loop = function () {
 
         if (spawns[0].getEnergyTotal() == spawns[0].getEnergyCapacityTotal() && roomObj.find(FIND_MY_STRUCTURES, { filter: (struct) => struct.structureType == STRUCTURE_EXTENSION }).length < config.maxExtensions) {
             var firstCont = roomObj.find(FIND_MY_STRUCTURES, { filter: (struct) => struct.structureType == STRUCTURE_EXTENSION });
-            roomObj.createConstructionSite(firstCont[0].pos.x, firstCont[0].pos.y - 1, STRUCTURE_EXTENSION);
+            console.log(firstCont[0]);
+            //if (firstCont[0] == null || firstCont[0] == nil || firstCont == {} || firstCont == "") {
+            //    roomObj.createConstructionSite(spawns[0].pos.x + 5, spawns[0].pos.y, STRUCTURE_EXTENSION);
+            //    firstCont = roomObj.find(FIND_MY_STRUCTURES, { filter: (struct) => struct.structureType == STRUCTURE_EXTENSION });
+            //}
+           // roomObj.createConstructionSite(firstCont[0].pos.x, firstCont[0].pos.y - 1, STRUCTURE_EXTENSION);
         }
 
         //var builders = creepFactory.countTypeByRoom(Role.builder, room);
